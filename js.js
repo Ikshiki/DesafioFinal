@@ -17,13 +17,6 @@ var App = {
     },
     controlers: {
 
-        svgPath: function(ori, color) {            
-                var svg = "http://www.w3.org/2000/svg";
-                
-
-                
-        },
-
         renderAllCards: function () {
             var cards = App.store.state.cards;
             console.log("Vamos rendeziar all cards", cards);
@@ -34,19 +27,20 @@ var App = {
 
                 var el = document.createElement("div");
                 el.style.display = "flex";
-                //el.className = "div-card";
+                el.className = "div-card";
                 el.style.alignContent = "flex-start";
                 el.style.width = "150px";
-                el.style.height = "250px";
+                el.style.height = "300px";
                 el.style.flexWrap = "wrap";
-                el.style.border = "1px solid pink";
+                el.style.border = "1px solid black";
                 el.style.borderRadius = "5px";
                 el.style.margin = "15px";
-               
+
 
                 var nameDiv = document.createElement("div");
                 nameDiv.style.display = "flex";
                 nameDiv.style.flex = "1 100%";
+                nameDiv.style.textDecoration = "underline";
                 nameDiv.style.fontFamily = "arial";
                 nameDiv.style.fontSize = "15px";
                 nameDiv.style.alignContent = "center";
@@ -82,7 +76,7 @@ var App = {
                 img.src = card.url;
                 el.appendChild(img);
 
-                var svgDiv= document.createElement("div");
+                var svgDiv = document.createElement("div");
                 svgDiv.style.display = "flex";
                 svgDiv.style.flex = "1 100%";
                 svgDiv.style.justifyContent = "space-between";
@@ -111,7 +105,7 @@ var App = {
                 var canvasPath2 = document.createElementNS(svg, "path");
                 canvasPath2.setAttributeNS(null, "d", "M620.345,79.094c-0.079-3.419-2.444-6.361-5.771-7.16L316.135,0.206c-1.165-0.275-2.362-0.275-3.526,0L14.153,71.935 c-3.326,0.799-5.695,3.74-5.77,7.16C8.36,80.104,6.598,181.547,42.758,299.032c60.682,197.176,179.476,287.74,268.446,328.996    c1.005,0.467,2.086,0.7,3.167,0.7s2.162-0.233,3.168-0.7c161.192-74.737,234.949-220.163,268.438-328.996    C622.13,181.543,620.365,80.104,620.345,79.094z M571.584,294.598c-32.375,105.191-103.248,245.435-257.211,318.274    C160.556,540.104,89.687,400.061,57.286,295.024c-30.653-99.383-33.622-186.982-33.84-209.832l290.927-69.917l290.915,69.917    C605.074,107.993,602.144,195.283,571.584,294.598z");
                 canvasPath2.setAttributeNS(null, "fill", "#808080");
-                shield.appendChild(canvasPath);
+                shield.appendChild(canvasPath2);
 
                 var attack = document.createElement("div");
                 attack.style.display = "flex";
@@ -126,14 +120,33 @@ var App = {
                 defense.style.width = "75px";
                 defense.innerHTML = card.defense;
                 el.appendChild(defense);
+
+                var cashDiv = document.createElement("div");
+                cashDiv.style.display = "flex";
+                cashDiv.style.flex = "1 100%";
+                cashDiv.style.justifyContent = "center";
+                cashDiv.style.alignContent = "center";
+                el.appendChild(cashDiv);
+
+                var cash = document.createElementNS(svg, "svg");
+                cash.setAttributeNS(null, "width", "20px");
+                cash.setAttributeNS(null, "height", "20px");
+                cash.setAttributeNS(null, "viewBox", "0 0 24 24");
+                cashDiv.appendChild(cash);
+                var canvasPath = document.createElementNS(svg, "path");
+                canvasPath.setAttributeNS(null, "d", "M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z");
+                canvasPath.setAttributeNS(null, "fill", "#808080");
+                cash.appendChild(canvasPath);
+                var canvasPath2 = document.createElementNS(svg, "path");
+                canvasPath2.setAttributeNS(null, "d", "M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2H3z");
+                canvasPath2.setAttributeNS(null, "fill", "#808080");
+                cash.appendChild(canvasPath2);
+
                 
 
 
-                                
-
-
                 App.elements.cards[cards.id] = el;
-                App.elements.marketContainer.appendChild(el);                
+                App.elements.marketContainer.appendChild(el);
             }
         },
     },
