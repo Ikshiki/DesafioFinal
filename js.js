@@ -13,9 +13,19 @@ var App = {
     store: {
         state: {
             cards: cards,
+            isDropDownOpen: false,
         }
     },
     controlers: {
+
+        toggleDropDown: function () {
+            if (App.store.state.isDropDownOpen) {
+                App.store.state.isDropDownOpen = true;
+            }
+            else {
+                App.store.state.isDropDownOpen = false;
+            }
+        },
 
         renderAllCards: function () {
             var cards = App.store.state.cards;
@@ -42,14 +52,17 @@ var App = {
                 nameDiv.style.flex = "1 100%";
                 nameDiv.style.textDecoration = "underline";
                 nameDiv.style.fontFamily = "arial";
-                nameDiv.style.fontSize = "15px";
+                nameDiv.style.fontSize = "17px";
                 nameDiv.style.alignContent = "center";
                 nameDiv.style.justifyContent = "center";
+                nameDiv.style.marginTop = "5px"
                 nameDiv.innerHTML = card.nome;
                 el.appendChild(nameDiv);
 
                 var lifeDiv = document.createElement("div");
                 lifeDiv.style.display = "flex";
+                lifeDiv.style.flex = "1 100%";
+                lifeDiv.style.marginLeft = "5px";
                 lifeDiv.style.alignContent = "flex-end";
                 lifeDiv.innerHTML = card.life;
                 el.appendChild(lifeDiv);
@@ -58,15 +71,11 @@ var App = {
                 var life = document.createElementNS(svg, "svg");
                 life.setAttributeNS(null, "width", "20px");
                 life.setAttributeNS(null, "height", "20px");
-                life.setAttributeNS(null, "viewBox", "0 0 32 32");
+                life.setAttributeNS(null, "viewBox", "0 0 24 24");
                 lifeDiv.appendChild(life);
                 var canvasPath = document.createElementNS(svg, "path");
-                canvasPath.setAttributeNS(null, "d", "M16.7070313,2.2929688c-0.390625-0.390625-1.0234375-0.390625-1.4140625,0C14.9135742,2.6723633,6,11.6816406,6,20    c0,5.5141602,4.4858398,10,10,10c5.5136719,0,10-4.4858398,10-10C26,11.6816406,17.0869141,2.6723633,16.7070313,2.2929688z     M16,28c-4.4111328,0-8-3.5888672-8-8c0-6.2075195,5.9248047-13.2612305,8.0004883-15.5410156    C18.0761719,6.7368164,24,13.7836914,24,20C24,24.4111328,20.4111328,28,16,28z");
+                canvasPath.setAttributeNS(null, "d", "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z");
                 canvasPath.setAttributeNS(null, "fill", "#ff0000");
-                life.appendChild(canvasPath);
-                var canvasPath2 = document.createElementNS(svg, "path");
-                canvasPath2.setAttributeNS(null, "d", "M16,24c-2.2055664,0-4-1.8105469-4-4.0356445c0-0.5522461-0.4477539-1-1-1s-1,0.4477539-1,1    C10,23.2924805,12.6914063,26,16,26c0.5522461,0,1-0.4477539,1-1S16.5522461,24,16,24z");
-                canvasPath2.setAttributeNS(null, "fill", "#ff0000");
                 life.appendChild(canvasPath);
 
 
@@ -79,6 +88,8 @@ var App = {
                 var svgDiv = document.createElement("div");
                 svgDiv.style.display = "flex";
                 svgDiv.style.flex = "1 100%";
+                svgDiv.style.marginLeft = "5px";
+                svgDiv.style.marginRight = "5px";
                 svgDiv.style.justifyContent = "space-between";
                 el.appendChild(svgDiv);
 
@@ -110,14 +121,16 @@ var App = {
                 var attack = document.createElement("div");
                 attack.style.display = "flex";
                 attack.style.justifyContent = "flex-start";
-                attack.style.width = "75px";
+                attack.style.marginLeft = "6px";
+                attack.style.width = "69px";
                 attack.innerHTML = card.attack;
                 el.appendChild(attack);
 
                 var defense = document.createElement("div");
                 defense.style.display = "flex";
                 defense.style.justifyContent = "flex-end";
-                defense.style.width = "75px";
+                defense.style.marginRight = "6px";
+                defense.style.width = "69px";
                 defense.innerHTML = card.defense;
                 el.appendChild(defense);
 
@@ -128,21 +141,49 @@ var App = {
                 cashDiv.style.alignContent = "center";
                 el.appendChild(cashDiv);
 
+                var cashButton = document.createElement("button");
+                cashButton.style.backgroundColor = "#fafafa";
+                //cashButton.style.border = "none";                
+                cashButton.style.color = "#3c4043";
+                cashButton.style.borderRadius = "5px";
+                //cashButton.style.outline = "none";
+                cashButton.style.height = "28px";
+                cashButton.style.width = "65px";
+                cashButton.style.fontFamily = "arial, sans-serif";
+                cashButton.style.fontSize = "14px";
+                cashButton.style.cursor = "pointer";
+
+                cashDiv.appendChild(cashButton);
+
                 var cash = document.createElementNS(svg, "svg");
                 cash.setAttributeNS(null, "width", "20px");
                 cash.setAttributeNS(null, "height", "20px");
                 cash.setAttributeNS(null, "viewBox", "0 0 24 24");
-                cashDiv.appendChild(cash);
+                cash.setAttributeNS(null, "fill", "none");
+                cash.setAttributeNS(null, "stroke", "currentColor");
+                cash.setAttributeNS(null, "stroke-width", "2");
+                cash.setAttributeNS(null, "stroke-linecap", "round");
+                cash.setAttributeNS(null, "stroke-linejoin", "round");
+                cashButton.appendChild(cash);
+                var line = document.createElementNS(svg, "line");
+                line.setAttributeNS(null, "x1", "12");
+                line.setAttributeNS(null, "x2", "12");
+                line.setAttributeNS(null, "y1", "1");
+                line.setAttributeNS(null, "y2", "23");
+                line.setAttributeNS(null, "fill", "#808080");
+                cash.appendChild(line);
                 var canvasPath = document.createElementNS(svg, "path");
-                canvasPath.setAttributeNS(null, "d", "M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z");
+                canvasPath.setAttributeNS(null, "d", "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6");
                 canvasPath.setAttributeNS(null, "fill", "#808080");
                 cash.appendChild(canvasPath);
-                var canvasPath2 = document.createElementNS(svg, "path");
-                canvasPath2.setAttributeNS(null, "d", "M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2H3z");
-                canvasPath2.setAttributeNS(null, "fill", "#808080");
-                cash.appendChild(canvasPath2);
 
-                
+                var cashNumber = document.createElement("span");
+                cashNumber.style.fontSize = "20px";
+                cashNumber.innerHTML = card.price;
+                cashButton.appendChild(cashNumber);
+
+
+
 
 
                 App.elements.cards[cards.id] = el;
@@ -158,6 +199,11 @@ var App = {
         cardDiv: document.createElement("div"),
         marketContainer: document.createElement("div"),
         cards: {},
+        marketDropDown: null,
+        canvasPath: null,
+        marketDropDownContainer: document.createElement("div"),
+
+
 
 
         createApp: function () {
@@ -176,33 +222,100 @@ var App = {
             this.app.appendChild(this.header);
         },
 
-        createCardDiv: function (el) {
-            el = document.createElement("div");
-            el.style.width = "100px";
-            el.style.height = "150px";
-            el.style.border = "1px solid pink";
-            el.style.margin = "15px";
-            this.marketContainer.appendChild(el);
+        // createCardDiv: function (el) {
+        //     el = document.createElement("div");
+        //     el.style.width = "100px";
+        //     el.style.height = "150px";
+        //     el.style.border = "1px solid pink";
+        //     el.style.margin = "15px";
+        //     this.marketContainer.appendChild(el);
+        // },
+
+
+        createMarketDropDownDiv: function () {
+            this.marketDropDownContainer.style.width = "20px";
+            this.marketDropDownContainer.style.height = "20px";
+            this.marketDropDownContainer.style.cursor = "pointer";
+            this.marketDropDownContainer.onclick
+            this.createMarketDropDown();
+
+            this.body.appendChild(this.marketDropDownContainer);
         },
+
+        createMarketDropDown: function () {
+            var svg = "http://www.w3.org/2000/svg";
+            this.marketDropDown = document.createElementNS(svg, "svg");
+            this.marketDropDown.setAttributeNS(null, "width", "20px");
+            this.marketDropDown.setAttributeNS(null, "height", "20px");
+            this.marketDropDown.setAttributeNS(null, "viewBox", "0 0 16 16");
+            this.marketDropDownContainer.appendChild(this.marketDropDown);
+
+            if (App.store.state.isDropDownOpen) {
+
+                this.marketDropDownContainer.onmouseover = function () {
+                    App.elements.canvasPath.setAttributeNS(null, "d", "M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z");
+                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
+                }
+
+                this.marketDropDownContainer.onmouseout = function () {
+                    App.elements.canvasPath.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z");
+                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
+
+                }
+
+                this.marketDropDownContainer.onclick = function () {
+                    App.elements.canvasPath.setAttributeNS(null, "d", "M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z");
+                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
+
+
+                    App.store.state.isDropDownOpen = false;
+                }
+            }
+            else {
+
+                this.marketDropDownContainer.onmouseover = function () {
+                    App.elements.canvasPath.setAttributeNS(null, "d", "M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z");
+                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
+                }
+
+                this.marketDropDownContainer.onmouseout = function () {
+                    App.elements.canvasPath.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z");
+                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
+
+                }
+
+                this.marketDropDownContainer.onclick = function () {
+                    App.elements.canvasPath.setAttributeNS(null, "d", "M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z");
+                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
+                    App.store.state.isDropDownOpen = false;
+                }
+
+
+                this.canvasPath = document.createElementNS(svg, "path");
+                this.canvasPath.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z");
+                this.canvasPath.setAttributeNS(null, "fill", "#808080");
+                this.marketDropDown.appendChild(this.canvasPath);
+               
+
+            }
+
+        },
+
+
 
         createMarketContainer: function () {
             this.marketContainer.style.display = "flex";
             this.marketContainer.style.flexDirection = "row";
             this.marketContainer.style.flexWrap = "wrap";
             this.marketContainer.style.justifyContent = "flex-start";
-            this.marketContainer.style.border = "1px solid green";
-
-
-            var cards = App.store.state.cards;
-            console.log("vamos renderizar all cards...", cards);
-
-            //TESTE PARA CRIAR VARIAS DIVS
-            // for (var i = 0; i < 10; i++) {
-            //     this.createCardDiv(this.teste + i);
-
-            // }
-
-
+            this.marketContainer.style.border = "1px solid green"
+            this.createMarketDropDownDiv();
             this.body.appendChild(this.marketContainer);
 
         },

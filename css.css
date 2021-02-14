@@ -1,3 +1,7 @@
-.div-card :hover {
+/* .div-card :hover {
     box-shadow: 0 1px 6px rgb(32 33 36 / 28%);        
+} */
+
+.text {
+    text-decoration: bold;
 }
