@@ -4,4 +4,7 @@
 
 .text {
     text-decoration: bold;
+    visibility: hidden;
+    visibility: visible;
+    display: none;
 }
