@@ -20,10 +20,10 @@ var App = {
 
         toggleDropDown: function () {
             if (App.store.state.isDropDownOpen) {
-                App.store.state.isDropDownOpen = true;
+                App.store.state.isDropDownOpen = false;
             }
             else {
-                App.store.state.isDropDownOpen = false;
+                App.store.state.isDropDownOpen = true;
             }
         },
 
@@ -201,7 +201,7 @@ var App = {
         cards: {},
         marketDropDown: null,
         canvasPath: null,
-        marketDropDownContainer: document.createElement("div"),
+        marketDropDownButton: document.createElement("button"),
 
 
 
@@ -222,24 +222,54 @@ var App = {
             this.app.appendChild(this.header);
         },
 
-        // createCardDiv: function (el) {
-        //     el = document.createElement("div");
-        //     el.style.width = "100px";
-        //     el.style.height = "150px";
-        //     el.style.border = "1px solid pink";
-        //     el.style.margin = "15px";
-        //     this.marketContainer.appendChild(el);
-        // },
-
-
         createMarketDropDownDiv: function () {
-            this.marketDropDownContainer.style.width = "20px";
-            this.marketDropDownContainer.style.height = "20px";
-            this.marketDropDownContainer.style.cursor = "pointer";
-            this.marketDropDownContainer.onclick
+            this.marketDropDownButton.style.width = "40px";
+            this.marketDropDownButton.style.height = "40px";
+            this.marketDropDownButton.style.cursor = "pointer";
+
             this.createMarketDropDown();
 
-            this.body.appendChild(this.marketDropDownContainer);
+            if (App.store.state.isDropDownOpen) {
+                this.marketDropDownButton.onmouseover = function () {
+                    App.elements.pathArrowUp.setAttributeNS(null, "d", "M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z");
+                    App.elements.pathArrowUp.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.pathArrowUp);
+                }
+            }
+            else {
+
+                this.marketDropDownButton.onmouseover = function () {
+                    App.elements.pathArrowDown.setAttributeNS(null, "d", "M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z");
+                    App.elements.pathArrowDown.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.pathArrowDown);
+
+                }
+            }
+
+            if (App.store.state.isDropDownOpen) {
+                this.marketDropDownButton.onmouseout = function () {
+                    App.elements.pathArrowUp.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z");
+                    App.elements.pathArrowUp.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.pathArrowUp);
+                }
+            }
+            else {
+
+                this.marketDropDownButton.onmouseout = function () {
+                    App.elements.pathArrowDown.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z");
+                    App.elements.pathArrowDown.setAttributeNS(null, "fill", "#808080");
+                    App.elements.marketDropDown.appendChild(App.elements.pathArrowDown);
+
+                }
+            }
+
+            this.marketDropDownButton.onclick = function () {
+                App.controlers.toggleDropDown();
+                App.elements.arrowDirection();
+                console.log(App.store.state.isDropDownOpen);
+            }
+
+            this.body.appendChild(this.marketDropDownButton);
         },
 
         createMarketDropDown: function () {
@@ -248,66 +278,36 @@ var App = {
             this.marketDropDown.setAttributeNS(null, "width", "20px");
             this.marketDropDown.setAttributeNS(null, "height", "20px");
             this.marketDropDown.setAttributeNS(null, "viewBox", "0 0 16 16");
-            this.marketDropDownContainer.appendChild(this.marketDropDown);
+            this.marketDropDownButton.appendChild(this.marketDropDown);
 
-            if (App.store.state.isDropDownOpen) {
-
-                this.marketDropDownContainer.onmouseover = function () {
-                    App.elements.canvasPath.setAttributeNS(null, "d", "M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z");
-                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
-                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
-                }
-
-                this.marketDropDownContainer.onmouseout = function () {
-                    App.elements.canvasPath.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z");
-                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
-                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
-
-                }
-
-                this.marketDropDownContainer.onclick = function () {
-                    App.elements.canvasPath.setAttributeNS(null, "d", "M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z");
-                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
-                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
+            this.pathArrowUp = document.createElementNS(svg, "path");
+            this.pathArrowUp.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z");
+            this.pathArrowUp.setAttributeNS(null, "fill", "#808080");
 
 
-                    App.store.state.isDropDownOpen = false;
-                }
-            }
-            else {
+            this.pathArrowDown = document.createElementNS(svg, "path");
+            this.pathArrowDown.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z");
+            this.pathArrowDown.setAttributeNS(null, "fill", "#808080");
 
-                this.marketDropDownContainer.onmouseover = function () {
-                    App.elements.canvasPath.setAttributeNS(null, "d", "M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z");
-                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
-                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
-                }
-
-                this.marketDropDownContainer.onmouseout = function () {
-                    App.elements.canvasPath.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z");
-                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
-                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
-
-                }
-
-                this.marketDropDownContainer.onclick = function () {
-                    App.elements.canvasPath.setAttributeNS(null, "d", "M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z");
-                    App.elements.canvasPath.setAttributeNS(null, "fill", "#808080");
-                    App.elements.marketDropDown.appendChild(App.elements.canvasPath);
-                    App.store.state.isDropDownOpen = false;
-                }
-
-
-                this.canvasPath = document.createElementNS(svg, "path");
-                this.canvasPath.setAttributeNS(null, "d", "M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z");
-                this.canvasPath.setAttributeNS(null, "fill", "#808080");
-                this.marketDropDown.appendChild(this.canvasPath);
-               
-
-            }
-
+            this.arrowDirection();
         },
 
+        arrowDirection: function () {
 
+            if (App.store.state.isDropDownOpen) {
+                App.elements.marketDropDown.appendChild(App.elements.pathArrowUp);
+                App.elements.pathArrowDown.setAttributeNS(null, "visibility", "hidden");
+                App.elements.pathArrowUp.setAttributeNS(null, "visibility", "visible");
+                App.elements.marketContainer.style.display = "none";
+
+            }
+            else {
+                App.elements.marketDropDown.appendChild(App.elements.pathArrowDown);
+                App.elements.pathArrowUp.setAttributeNS(null, "visibility", "hidden");
+                App.elements.pathArrowDown.setAttributeNS(null, "visibility", "visible");
+                App.elements.marketContainer.style.display = "flex";
+            }
+        },
 
         createMarketContainer: function () {
             this.marketContainer.style.display = "flex";
@@ -322,8 +322,8 @@ var App = {
 
         createBody: function () {
             this.body.style.position = "flex";
-            this.body.innerHTML = "Eu sou o body";
             this.body.style.border = "1px solid green";
+            this.body.innerHTML = "Cards Market";
             this.createMarketContainer();
             this.app.appendChild(this.body);
 
