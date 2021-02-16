@@ -202,6 +202,10 @@ var App = {
         marketDropDown: null,
         canvasPath: null,
         marketDropDownButton: document.createElement("button"),
+        marketHeader: document.createElement("div"),
+        yourCardsHeader: document.createElement("div"),
+        yourCardsContainer: document.createElement("div"),
+        yourCardsArray: [],
 
 
 
@@ -222,10 +226,12 @@ var App = {
             this.app.appendChild(this.header);
         },
 
-        createMarketDropDownDiv: function () {
+        createMarketDropDownButton: function () {
             this.marketDropDownButton.style.width = "40px";
             this.marketDropDownButton.style.height = "40px";
             this.marketDropDownButton.style.cursor = "pointer";
+            this.marketDropDownButton.style.border = "none";
+            this.marketDropDownButton.style.outline = "none";
 
             this.createMarketDropDown();
 
@@ -264,12 +270,13 @@ var App = {
             }
 
             this.marketDropDownButton.onclick = function () {
+                App.elements.marketDropDownButton.style.border = "none"
                 App.controlers.toggleDropDown();
                 App.elements.arrowDirection();
                 console.log(App.store.state.isDropDownOpen);
             }
 
-            this.body.appendChild(this.marketDropDownButton);
+            this.marketHeader.appendChild(this.marketDropDownButton);
         },
 
         createMarketDropDown: function () {
@@ -309,13 +316,66 @@ var App = {
             }
         },
 
+        createMarketHeaderSpan: function(text, a) {
+            this.marketHeaderSpan = document.createElement("span");
+            this.marketHeaderSpan.style.fontSize = "34px";
+            this.marketHeaderSpan.style.fontFamily = "arial";
+            this.marketHeaderSpan.innerHTML = text;
+            if ( a==1 ) {
+                this.yourCardsHeader.appendChild(this.marketHeaderSpan);
+            }   
+            else if (a == 2) {
+                this.marketHeader.appendChild(this.marketHeaderSpan);
+            }     
+                       
+        },
+
+        createYourCardsHeader: function() {
+            var a = 1;
+            this.yourCardsHeader.style.display = "flex";
+            this.yourCardsHeader.style.flex = "1 100%";
+            this.yourCardsHeader.style.justifyContent = "center";
+            this.yourCardsHeader.style.alignContent = "center";
+            this.yourCardsHeader.style.textAlign = "center";
+            this.yourCardsHeader.style.border = "1px solid blue";            
+            this.createMarketHeaderSpan("Your Cards", a);
+            this.body.appendChild(this.yourCardsHeader);
+
+        },
+
+        createYourCardsContainer: function() {
+            this.yourCardsContainer.style.flexDirection = "row";
+            this.yourCardsContainer.style.flexWrap = "wrap";
+            this.yourCardsContainer.style.justifyContent = "flex-start";
+            this.yourCardsContainer.style.minHeight = "50px";
+            this.yourCardsContainer.style.border = "1px solid green";            
+            this.body.appendChild(this.yourCardsContainer);
+
+            // if (yourCardsArray[] =) {
+            //     this.yourCardsContainer.innerHTML = "Don´t have Cards";
+            // }
+        },
+
+        createMarketHeader: function () {
+            var a = 2;
+            this.marketHeader.style.display = "flex";
+            this.marketHeader.style.flex = "1 100%";
+            this.marketHeader.style.justifyContent = "center";
+            this.marketHeader.style.alignContent = "center";
+            this.marketHeader.style.textAlign = "center";
+            this.marketHeader.style.border = "1px solid blue";            
+            this.createMarketDropDownButton();
+            this.createMarketHeaderSpan("Cards Market", a);
+            this.body.appendChild(this.marketHeader);
+        },
+
         createMarketContainer: function () {
             this.marketContainer.style.display = "flex";
             this.marketContainer.style.flexDirection = "row";
             this.marketContainer.style.flexWrap = "wrap";
             this.marketContainer.style.justifyContent = "flex-start";
             this.marketContainer.style.border = "1px solid green"
-            this.createMarketDropDownDiv();
+            
             this.body.appendChild(this.marketContainer);
 
         },
@@ -323,7 +383,9 @@ var App = {
         createBody: function () {
             this.body.style.position = "flex";
             this.body.style.border = "1px solid green";
-            this.body.innerHTML = "Cards Market";
+            this.createYourCardsHeader();
+            this.createYourCardsContainer();
+            this.createMarketHeader();
             this.createMarketContainer();
             this.app.appendChild(this.body);
 
