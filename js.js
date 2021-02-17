@@ -29,7 +29,7 @@ var App = {
 
         renderAllCards: function () {
             var cards = App.store.state.cards;
-            console.log("Vamos rendeziar all cards", cards);
+            console.log("Vamos rendeziar all cards..", cards);
 
             for (var i = 0; i < cards.length; i++) {
                 var card = cards[i];
@@ -45,6 +45,11 @@ var App = {
                 el.style.border = "1px solid black";
                 el.style.borderRadius = "5px";
                 el.style.margin = "15px";
+                el.setAttribute("id", card.id);
+
+                el.onclick = function(e) {
+                    console.log(e.target);
+                }
 
 
                 var nameDiv = document.createElement("div");
@@ -55,7 +60,8 @@ var App = {
                 nameDiv.style.fontSize = "17px";
                 nameDiv.style.alignContent = "center";
                 nameDiv.style.justifyContent = "center";
-                nameDiv.style.marginTop = "5px"
+                nameDiv.style.marginTop = "5px";
+                nameDiv.style.zIndex = "-1";
                 nameDiv.innerHTML = card.nome;
                 el.appendChild(nameDiv);
 
@@ -64,6 +70,7 @@ var App = {
                 lifeDiv.style.flex = "1 100%";
                 lifeDiv.style.marginLeft = "5px";
                 lifeDiv.style.alignContent = "flex-end";
+                lifeDiv.style.zIndex = "-1";
                 lifeDiv.innerHTML = card.life;
                 el.appendChild(lifeDiv);
 
@@ -82,6 +89,7 @@ var App = {
                 var img = document.createElement("img");
                 img.style.maxWidth = "100%";
                 img.style.maxHeight = "70%";
+                img.style.zIndex = "-1";
                 img.src = card.url;
                 el.appendChild(img);
 
@@ -91,6 +99,7 @@ var App = {
                 svgDiv.style.marginLeft = "5px";
                 svgDiv.style.marginRight = "5px";
                 svgDiv.style.justifyContent = "space-between";
+                svgDiv.style.zIndex = "-1";
                 el.appendChild(svgDiv);
 
 
@@ -123,6 +132,7 @@ var App = {
                 attack.style.justifyContent = "flex-start";
                 attack.style.marginLeft = "6px";
                 attack.style.width = "69px";
+                attack.style.zIndex = "-1";
                 attack.innerHTML = card.attack;
                 el.appendChild(attack);
 
@@ -131,6 +141,7 @@ var App = {
                 defense.style.justifyContent = "flex-end";
                 defense.style.marginRight = "6px";
                 defense.style.width = "69px";
+                defense.style.zIndex = "-1";
                 defense.innerHTML = card.defense;
                 el.appendChild(defense);
 
@@ -139,6 +150,7 @@ var App = {
                 cashDiv.style.flex = "1 100%";
                 cashDiv.style.justifyContent = "center";
                 cashDiv.style.alignContent = "center";
+                cashDiv.style.zIndex = "-1";
                 el.appendChild(cashDiv);
 
                 var cashButton = document.createElement("button");
@@ -151,9 +163,13 @@ var App = {
                 cashButton.style.width = "65px";
                 cashButton.style.fontFamily = "arial, sans-serif";
                 cashButton.style.fontSize = "14px";
-                cashButton.style.cursor = "pointer";
+                cashButton.style.cursor = "pointer";             
 
                 cashDiv.appendChild(cashButton);
+
+                // cashButton.onclick = function(e) {
+                //     console.log("apertando botao..." + "Botao...." + e.target);
+                // }
 
                 var cash = document.createElementNS(svg, "svg");
                 cash.setAttributeNS(null, "width", "20px");
@@ -182,10 +198,6 @@ var App = {
                 cashNumber.innerHTML = card.price;
                 cashButton.appendChild(cashNumber);
 
-
-
-
-
                 App.elements.cards[cards.id] = el;
                 App.elements.marketContainer.appendChild(el);
             }
@@ -209,7 +221,6 @@ var App = {
 
 
 
-
         createApp: function () {
             this.app.style.position = "absolute";
             this.app.style.width = "100%";
@@ -224,6 +235,7 @@ var App = {
             this.header.style.height = "50px";
             this.header.style.border = "1px solid blue";
             this.app.appendChild(this.header);
+            
         },
 
         createMarketDropDownButton: function () {
@@ -344,6 +356,8 @@ var App = {
         },
 
         createYourCardsContainer: function() {
+            var cardsArray = [];
+            console.log("tamanho do array..." + cardsArray.length);
             this.yourCardsContainer.style.flexDirection = "row";
             this.yourCardsContainer.style.flexWrap = "wrap";
             this.yourCardsContainer.style.justifyContent = "flex-start";
@@ -351,9 +365,16 @@ var App = {
             this.yourCardsContainer.style.border = "1px solid green";            
             this.body.appendChild(this.yourCardsContainer);
 
-            // if (yourCardsArray[] =) {
-            //     this.yourCardsContainer.innerHTML = "Don´t have Cards";
-            // }
+            if (cardsArray.length == 0) {
+                this.yourCardsContainer.innerHTML = "Don´t have Cards";
+            }
+            else {
+                
+            }
+        },
+
+        createCardButton: function() {
+            
         },
 
         createMarketHeader: function () {
