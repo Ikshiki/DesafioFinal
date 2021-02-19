@@ -27,6 +27,16 @@ var App = {
             }
         },
 
+        renderYourCards: function () {
+            console.log("Vamos rendeziar Your cards..", cards);
+
+            for (var i = 0; i < App.elements.yourCardsArray.length; i++) {
+                var card = App.elements.yourCardsArray[i];
+
+                App.elements.yourCardsContainer.appendChild(card);
+            }
+        },
+
         renderAllCards: function () {
             var cards = App.store.state.cards;
             console.log("Vamos rendeziar all cards..", cards);
@@ -37,7 +47,7 @@ var App = {
 
                 var el = document.createElement("div");
                 el.style.display = "flex";
-                el.className = "div-card";
+                //el.className = "div-card";
                 el.style.alignContent = "flex-start";
                 el.style.width = "150px";
                 el.style.height = "300px";
@@ -45,10 +55,17 @@ var App = {
                 el.style.border = "1px solid black";
                 el.style.borderRadius = "5px";
                 el.style.margin = "15px";
-                el.setAttribute("id", card.id);
+                el.setAttribute("i", card.id);
+                el.getAttribute(i)
 
-                el.onclick = function(e) {
+                el.onclick = function (e) {
                     console.log(e.target);
+                    console.log("esta carta foi adiconada com sucesso!!!");
+                    App.elements.yourCardsArray.push(e.target);
+                    var clickId = e.target.getAttribute("i");
+                    App.elements.cards.splice(clickId, 1);
+                    e.target.remove();
+                    App.controlers.renderYourCards();
                 }
 
 
@@ -163,7 +180,7 @@ var App = {
                 cashButton.style.width = "65px";
                 cashButton.style.fontFamily = "arial, sans-serif";
                 cashButton.style.fontSize = "14px";
-                cashButton.style.cursor = "pointer";             
+                cashButton.style.cursor = "pointer";
 
                 cashDiv.appendChild(cashButton);
 
@@ -198,10 +215,11 @@ var App = {
                 cashNumber.innerHTML = card.price;
                 cashButton.appendChild(cashNumber);
 
-                App.elements.cards[cards.id] = el;
+
+                App.elements.cards[card.id] = el;
                 App.elements.marketContainer.appendChild(el);
             }
-        },
+        }
     },
     elements: {
         app: document.getElementById("app"),
@@ -210,7 +228,7 @@ var App = {
         footer: document.createElement("div"),
         cardDiv: document.createElement("div"),
         marketContainer: document.createElement("div"),
-        cards: {},
+        cards: [],
         marketDropDown: null,
         canvasPath: null,
         marketDropDownButton: document.createElement("button"),
@@ -235,7 +253,7 @@ var App = {
             this.header.style.height = "50px";
             this.header.style.border = "1px solid blue";
             this.app.appendChild(this.header);
-            
+
         },
 
         createMarketDropDownButton: function () {
@@ -328,53 +346,46 @@ var App = {
             }
         },
 
-        createMarketHeaderSpan: function(text, a) {
+        createMarketHeaderSpan: function (text, a) {
             this.marketHeaderSpan = document.createElement("span");
             this.marketHeaderSpan.style.fontSize = "34px";
             this.marketHeaderSpan.style.fontFamily = "arial";
             this.marketHeaderSpan.innerHTML = text;
-            if ( a==1 ) {
+            if (a == 1) {
                 this.yourCardsHeader.appendChild(this.marketHeaderSpan);
-            }   
+            }
             else if (a == 2) {
                 this.marketHeader.appendChild(this.marketHeaderSpan);
-            }     
-                       
+            }
+
         },
 
-        createYourCardsHeader: function() {
+        createYourCardsHeader: function () {
             var a = 1;
             this.yourCardsHeader.style.display = "flex";
             this.yourCardsHeader.style.flex = "1 100%";
             this.yourCardsHeader.style.justifyContent = "center";
             this.yourCardsHeader.style.alignContent = "center";
             this.yourCardsHeader.style.textAlign = "center";
-            this.yourCardsHeader.style.border = "1px solid blue";            
+            this.yourCardsHeader.style.border = "1px solid blue";
             this.createMarketHeaderSpan("Your Cards", a);
             this.body.appendChild(this.yourCardsHeader);
 
         },
 
-        createYourCardsContainer: function() {
-            var cardsArray = [];
-            console.log("tamanho do array..." + cardsArray.length);
+        createYourCardsContainer: function () {
             this.yourCardsContainer.style.flexDirection = "row";
             this.yourCardsContainer.style.flexWrap = "wrap";
             this.yourCardsContainer.style.justifyContent = "flex-start";
-            this.yourCardsContainer.style.minHeight = "50px";
-            this.yourCardsContainer.style.border = "1px solid green";            
+            this.yourCardsContainer.style.border = "1px solid green";
+            this.yourCardsContainer.innerHTML = "Don´t have Cards";
             this.body.appendChild(this.yourCardsContainer);
 
-            if (cardsArray.length == 0) {
-                this.yourCardsContainer.innerHTML = "Don´t have Cards";
-            }
-            else {
-                
-            }
+
         },
 
-        createCardButton: function() {
-            
+        createCardButton: function () {
+
         },
 
         createMarketHeader: function () {
@@ -384,7 +395,7 @@ var App = {
             this.marketHeader.style.justifyContent = "center";
             this.marketHeader.style.alignContent = "center";
             this.marketHeader.style.textAlign = "center";
-            this.marketHeader.style.border = "1px solid blue";            
+            this.marketHeader.style.border = "1px solid blue";
             this.createMarketDropDownButton();
             this.createMarketHeaderSpan("Cards Market", a);
             this.body.appendChild(this.marketHeader);
@@ -396,7 +407,7 @@ var App = {
             this.marketContainer.style.flexWrap = "wrap";
             this.marketContainer.style.justifyContent = "flex-start";
             this.marketContainer.style.border = "1px solid green"
-            
+
             this.body.appendChild(this.marketContainer);
 
         },
