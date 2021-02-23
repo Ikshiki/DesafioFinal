@@ -27,13 +27,55 @@ var App = {
             }
         },
 
+        renderMarketCards: function () {
+
+            while (App.elements.marketContainer.firstChild) {
+                App.elements.marketContainer.removeChild(App.elements.marketContainer.firstChild);
+            }
+
+            for (var i = 1; i < App.elements.cards.length; i++) {
+                var card = App.elements.cards[i];
+                App.elements.marketContainer.appendChild(card);
+
+
+                card.onclick = function (e) {
+                    console.log("esta carta foi adiconada ao market com sucesso!!!");
+                    App.elements.yourCardsArray.push(e.target);
+                    var clickId = App.elements.cards.indexOf(e.target);
+                    App.elements.cards.splice(clickId, 1);
+                    e.target.remove();
+                    App.controlers.renderYourCards();
+                }
+
+            }
+        },
+
         renderYourCards: function () {
             console.log("Vamos rendeziar Your cards..", cards);
+
+            while (App.elements.yourCardsContainer.firstChild) {
+                App.elements.yourCardsContainer.removeChild(App.elements.yourCardsContainer.firstChild);
+            }
+
+
 
             for (var i = 0; i < App.elements.yourCardsArray.length; i++) {
                 var card = App.elements.yourCardsArray[i];
 
                 App.elements.yourCardsContainer.appendChild(card);
+
+                card.onclick = function (e) {
+                    console.log("esta carta foi vendida com sucesso!!!");
+                    App.elements.cards.push(e.target);
+                    var clickId = App.elements.yourCardsArray.indexOf(e.target);
+                    App.elements.yourCardsArray.splice(clickId, 1);
+                    e.target.remove();
+                    App.controlers.renderMarketCards();
+                }
+
+            }
+            if (App.elements.yourCardsArray.length == 0) {
+                App.elements.yourCardsContainer.innerHTML = "Don´t have Cards";
             }
         },
 
@@ -62,7 +104,7 @@ var App = {
                     console.log(e.target);
                     console.log("esta carta foi adiconada com sucesso!!!");
                     App.elements.yourCardsArray.push(e.target);
-                    var clickId = e.target.getAttribute("i");
+                    var clickId = App.elements.cards.indexOf(e.target);
                     App.elements.cards.splice(clickId, 1);
                     e.target.remove();
                     App.controlers.renderYourCards();
@@ -374,17 +416,16 @@ var App = {
         },
 
         createYourCardsContainer: function () {
+            this.yourCardsContainer.style.display = "flex";
             this.yourCardsContainer.style.flexDirection = "row";
             this.yourCardsContainer.style.flexWrap = "wrap";
             this.yourCardsContainer.style.justifyContent = "flex-start";
             this.yourCardsContainer.style.border = "1px solid green";
-            this.yourCardsContainer.innerHTML = "Don´t have Cards";
+            if (this.yourCardsArray.length == 0) {
+                this.yourCardsContainer.innerHTML = "Don´t have Cards";
+            }
             this.body.appendChild(this.yourCardsContainer);
 
-
-        },
-
-        createCardButton: function () {
 
         },
 
