@@ -12,6 +12,7 @@ var App = {
     },
     store: {
         state: {
+            search: "",
             cards: cards,
             isDropDownOpen: false,
         }
@@ -27,7 +28,14 @@ var App = {
             }
         },
 
+        refreshNumber: function (n) {
+            App.elements.number = App.elements.number - parseInt(n);
+            App.elements.createRandomNumber();
+        },
+
+
         renderMarketCards: function () {
+            var search = App.store.state.search;
 
             while (App.elements.marketContainer.firstChild) {
                 App.elements.marketContainer.removeChild(App.elements.marketContainer.firstChild);
@@ -35,32 +43,53 @@ var App = {
 
             for (var i = 1; i < App.elements.cards.length; i++) {
                 var card = App.elements.cards[i];
+                var c = App.elements.cards[i].childNodes;
+                if (c[0].textContent.toLowerCase().search(search) === -1) {
+                    continue;
+                }
                 App.elements.marketContainer.appendChild(card);
+
+
 
 
                 card.onclick = function (e) {
                     console.log("esta carta foi adiconada ao market com sucesso!!!");
                     App.elements.yourCardsArray.push(e.target);
                     var clickId = App.elements.cards.indexOf(e.target);
+
+
+                    console.log("index of........." + indexOf(e.target));
+
+                    var x = App.elements.cards[App.elements.cards.indexOf(e.target)].childNodes
+                    App.controlers.refreshNumber(x[6].textContent);
+
                     App.elements.cards.splice(clickId, 1);
                     e.target.remove();
                     App.controlers.renderYourCards();
                 }
 
             }
+
+
+
         },
 
         renderYourCards: function () {
-            console.log("Vamos rendeziar Your cards..", cards);
+
+            var search = App.store.state.search;
 
             while (App.elements.yourCardsContainer.firstChild) {
                 App.elements.yourCardsContainer.removeChild(App.elements.yourCardsContainer.firstChild);
             }
 
-
-
             for (var i = 0; i < App.elements.yourCardsArray.length; i++) {
+
                 var card = App.elements.yourCardsArray[i];
+
+                var y = App.elements.yourCardsArray[i].childNodes;
+                if (y[0].textContent.toLowerCase().search(search) === -1) {
+                    continue;
+                }
 
                 App.elements.yourCardsContainer.appendChild(card);
 
@@ -68,14 +97,29 @@ var App = {
                     console.log("esta carta foi vendida com sucesso!!!");
                     App.elements.cards.push(e.target);
                     var clickId = App.elements.yourCardsArray.indexOf(e.target);
+
+
+
+                    var x = App.elements.cards[App.elements.cards.indexOf(e.target)].childNodes
+                    App.controlers.refreshNumber("-" + x[6].textContent);
+
+
+
                     App.elements.yourCardsArray.splice(clickId, 1);
                     e.target.remove();
+
+
+
+
                     App.controlers.renderMarketCards();
                 }
 
-            }
-            if (App.elements.yourCardsArray.length == 0) {
-                App.elements.yourCardsContainer.innerHTML = "Don´t have Cards";
+
+                if (App.elements.yourCardsArray.length == 0) {
+                    App.elements.body.removeChild(App.elements.yourCardsContainer);
+                    App.elements.createYourCardsContainer();
+                }
+
             }
         },
 
@@ -105,6 +149,13 @@ var App = {
                     console.log("esta carta foi adiconada com sucesso!!!");
                     App.elements.yourCardsArray.push(e.target);
                     var clickId = App.elements.cards.indexOf(e.target);
+
+                    console.log("index of........." + App.elements.cards.indexOf(e.target));
+
+                    var x = App.elements.cards[App.elements.cards.indexOf(e.target)].childNodes
+                    App.controlers.refreshNumber(x[6].textContent);
+
+
                     App.elements.cards.splice(clickId, 1);
                     e.target.remove();
                     App.controlers.renderYourCards();
@@ -278,6 +329,11 @@ var App = {
         yourCardsHeader: document.createElement("div"),
         yourCardsContainer: document.createElement("div"),
         yourCardsArray: [],
+        inputContainer: document.createElement("div"),
+        input: document.createElement("input"),
+        walletContainer: document.createElement("div"),
+        randomNumber: document.createElement("span"),
+        number: null,
 
 
 
@@ -285,15 +341,140 @@ var App = {
             this.app.style.position = "absolute";
             this.app.style.width = "100%";
             this.app.style.height = "100%";
-            this.app.style.border = "1px solid black";
+            //this.app.style.border = "1px solid black";
+        },
+
+        createLupa: function () {
+            var svg = "http://www.w3.org/2000/svg";
+            this.barLupa = document.createElementNS(svg, "svg");
+            this.barLupa.setAttributeNS(null, "width", "20px");
+            this.barLupa.setAttributeNS(null, "height", "20px");
+            this.barLupa.style.display = "inline-block";
+            this.barLupa.style.marginTop = "auto";
+            this.barLupa.style.marginBottom = "auto";
+            this.barLupa.style.marginLeft = "0.6rem";
+
+            var canvasPath = document.createElementNS(svg, "path");
+            canvasPath.setAttributeNS(null, "d", "M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z");
+            canvasPath.setAttributeNS(null, "fill", "#9aa0a6");
+            this.barLupa.appendChild(canvasPath);
+            this.inputContainer.appendChild(this.barLupa);
+
+        },
+
+        createInput: function () {
+            this.input.type = "text";
+            this.input.style.marginLeft = "0.75rem";
+            this.input.style.width = "6rem";
+            this.input.style.backgroundColor = "transparent";
+            this.input.style.border = "none";
+            this.input.style.font = "16px arial, sans-serif";
+            this.input.style.wordWrap = "break-word";
+            this.input.style.outline = "none";
+            this.input.onkeyup = function (e) {
+                App.store.state.search = e.target.value.toLowerCase();
+                App.controlers.renderMarketCards();
+                App.controlers.renderYourCards();
+
+            };
+            this.inputContainer.appendChild(this.input);
+        },
+
+        createInputContainer: function () {
+            this.inputContainer.style.display = "flex";
+            this.inputContainer.style.border = "1px solid lightgray";
+            this.inputContainer.style.borderRadius = "22px";
+            this.inputContainer.style.width = "10rem";
+            this.inputContainer.style.height = "36px";
+            this.inputContainer.style.marginLeft = "1rem";
+            this.inputContainer.style.marginTop = "auto";
+            this.inputContainer.style.marginBottom = "auto";
+            this.createLupa();
+            this.createInput();
+            this.header.appendChild(this.inputContainer);
+
+
+        },
+
+        createRandomNumber: function () {
+            if (this.number != null) {
+                this.walletContainer.removeChild(this.randomNumber);
+            }
+            if (this.number == null) {
+                var min = Math.ceil(70);
+                var max = Math.floor(150);
+                this.number = Math.floor(Math.random() * (150 - 70 + 1)) + 70;
+            }
+
+            this.randomNumber.innerHTML = this.number;
+            this.randomNumber.style.justifyContent = "center";
+            this.randomNumber.style.alignContent = "center";
+            this.randomNumber.style.marginTop = "auto";
+            this.randomNumber.style.marginBottom = "auto";
+
+            this.walletContainer.appendChild(this.randomNumber);
+
+        },
+
+        createWalletContainer: function () {
+            this.walletContainer.style.display = "flex";
+            this.walletContainer.style.justifyContent = "center";
+            this.walletContainer.style.alignContent = "center";
+            this.walletContainer.style.marginRight = "1rem";
+
+            var svg = "http://www.w3.org/2000/svg";
+            this.wallet = document.createElementNS(svg, "svg");
+            this.wallet.setAttributeNS(null, "width", "20px");
+            this.wallet.setAttributeNS(null, "height", "20px");
+            this.wallet.style.display = "inline-block";
+            this.wallet.style.marginTop = "auto";
+            this.wallet.style.marginBottom = "auto";
+
+            var canvasPath = document.createElementNS(svg, "path");
+            canvasPath.setAttributeNS(null, "d", "M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z");
+            canvasPath.setAttributeNS(null, "fill", "#9aa0a6");
+            this.wallet.appendChild(canvasPath);
+            this.walletContainer.appendChild(this.wallet);
+
+            var cash = document.createElementNS(svg, "svg");
+            cash.style.display = "inline-block";
+            cash.style.marginTop = "auto";
+            cash.style.marginBottom = "auto";
+            cash.setAttributeNS(null, "width", "16px");
+            cash.setAttributeNS(null, "height", "16px");
+            cash.setAttributeNS(null, "viewBox", "0 0 24 24");
+            cash.setAttributeNS(null, "fill", "none");
+            cash.setAttributeNS(null, "stroke", "currentColor");
+            cash.setAttributeNS(null, "stroke-width", "2");
+            cash.setAttributeNS(null, "stroke-linecap", "round");
+            cash.setAttributeNS(null, "stroke-linejoin", "round");
+            this.walletContainer.appendChild(cash);
+            var line = document.createElementNS(svg, "line");
+            line.setAttributeNS(null, "x1", "12");
+            line.setAttributeNS(null, "x2", "12");
+            line.setAttributeNS(null, "y1", "1");
+            line.setAttributeNS(null, "y2", "23");
+            line.setAttributeNS(null, "fill", "#808080");
+            cash.appendChild(line);
+            var canvasPath = document.createElementNS(svg, "path");
+            canvasPath.setAttributeNS(null, "d", "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6");
+            canvasPath.setAttributeNS(null, "fill", "#808080");
+            cash.appendChild(canvasPath);
+
+            this.createRandomNumber();
+
+            this.header.appendChild(this.walletContainer);
+
         },
 
         createHeader: function () {
-            this.header.style.position = "flex";
-            this.header.style.flex = "1 100%"
-            this.header.innerHTML = "Eu sou o header";
-            this.header.style.height = "50px";
-            this.header.style.border = "1px solid blue";
+            this.header.style.display = "flex";
+            this.header.style.flex = "1 100%";
+            this.header.style.flexWrap = "wrap";
+            this.header.style.justifyContent = "space-between";
+            this.createInputContainer();
+            this.createWalletContainer();
+
             this.app.appendChild(this.header);
 
         },
@@ -409,7 +590,9 @@ var App = {
             this.yourCardsHeader.style.justifyContent = "center";
             this.yourCardsHeader.style.alignContent = "center";
             this.yourCardsHeader.style.textAlign = "center";
+            this.yourCardsHeader.style.borderRadius = "22px";
             this.yourCardsHeader.style.border = "1px solid blue";
+            this.yourCardsHeader.style.marginTop = "0.5rem";
             this.createMarketHeaderSpan("Your Cards", a);
             this.body.appendChild(this.yourCardsHeader);
 
@@ -420,7 +603,8 @@ var App = {
             this.yourCardsContainer.style.flexDirection = "row";
             this.yourCardsContainer.style.flexWrap = "wrap";
             this.yourCardsContainer.style.justifyContent = "flex-start";
-            this.yourCardsContainer.style.border = "1px solid green";
+            //this.yourCardsContainer.style.border = "1px solid green";
+            this.yourCardsContainer.style.minHeight = "15px";
             if (this.yourCardsArray.length == 0) {
                 this.yourCardsContainer.innerHTML = "Don´t have Cards";
             }
@@ -436,6 +620,7 @@ var App = {
             this.marketHeader.style.justifyContent = "center";
             this.marketHeader.style.alignContent = "center";
             this.marketHeader.style.textAlign = "center";
+            this.marketHeader.style.borderRadius = "22px";
             this.marketHeader.style.border = "1px solid blue";
             this.createMarketDropDownButton();
             this.createMarketHeaderSpan("Cards Market", a);
@@ -447,7 +632,8 @@ var App = {
             this.marketContainer.style.flexDirection = "row";
             this.marketContainer.style.flexWrap = "wrap";
             this.marketContainer.style.justifyContent = "flex-start";
-            this.marketContainer.style.border = "1px solid green"
+
+            //this.marketContainer.style.border = "1px solid blue"
 
             this.body.appendChild(this.marketContainer);
 
@@ -455,7 +641,7 @@ var App = {
 
         createBody: function () {
             this.body.style.position = "flex";
-            this.body.style.border = "1px solid green";
+            //this.body.style.border = "1px solid green";
             this.createYourCardsHeader();
             this.createYourCardsContainer();
             this.createMarketHeader();
@@ -464,12 +650,23 @@ var App = {
 
 
         },
+        createFooterSpan: function () {
+            this.footerSpan = document.createElement("div");
+            this.footerSpan.innerHTML = "RPG Cards Market";
+            this.footer.appendChild(this.footerSpan);
+        },
 
         createFooter: function () {
-            this.footer.style.position = "flex";
-            this.footer.style.flex = "1 100%"
-            this.footer.style.height = "50px";
-            this.footer.innerHTML = "Eu sou o footer";
+            this.footer.style.display = "flex";
+            //this.footer.style.flex = "1 100%";
+            //this.footer.style.position = "absolute";
+            this.footer.style.bottom = "0";
+            this.footer.style.right = "0";
+            this.footer.style.left = "0";
+            this.footer.style.alignContent = "center";
+            this.footer.style.justifyContent = "center";
+            this.footer.style.margin = "auto";
+            this.createFooterSpan();
             this.footer.style.border = "1px solid red";
             this.app.appendChild(this.footer);
         },
